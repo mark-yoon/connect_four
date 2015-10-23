@@ -37,34 +37,6 @@ class board(object):
     print " 0 1 2 3 4 5 6 "
     return ""
 
-  # def __str__(self):
-  #   print " 0 1 2 3 4 5 6 "
-  #   for i in range(0, len(self.cells[0])):
-  #     y = self.y_max - y - 1
-  #     output = ''
-  #     for x in self.cells:
-  #     output += '|'
-
-
-
-    # for x in range(0, len(self.cells)):
-    #   x = self.x_max - x -1
-    #   x = self.cells[x]
-    #   output = ''
-    #   for y in x:
-    #     output += "|"
-    #     if y == 0:
-    #       output += " "
-    #     elif y == 1:
-    #       output += "O"
-    #     elif y == 2:
-    #       output += "X"
-    #   output += "|"
-    #   print output
-    # print "---------------"
-    # print " 0 1 2 3 4 5 6 "
-    # return ""
-
   def check_win(self, player):
     if player == 1:
       nodes = self.player1_locs
