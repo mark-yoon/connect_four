@@ -10,17 +10,17 @@ class Game(object):
   winner = None
   turn_count = None
 
-  def init(self):
+  def __init__(self):
     print "Welcome to CS 4701 Connect 4!"
     print "Please refer to Google regarding the rules of this game."
     valid = False
     while not valid:
       entity = raw_input("Would you like player 1 to be a computer? [Y/n]")
       if entity.lower() == 'y':
-        player1 = AI('o')
+        player1 = AI()
         valid = True
       elif entity.lower() == 'n':
-        player1 = Human('o')
+        player1 = Human()
         valid = True
       else:
         print "Please input a valid option."
@@ -31,10 +31,10 @@ class Game(object):
     while not valid:
       entity = raw_input("Would you like player 2 to be a computer? [Y/n]")
       if entity.lower() == 'y':
-        player2 = AI('x')
+        player2 = AI()
         valid = True
       elif entity.lower() == 'n':
-        player2 = Human('x')
+        player2 = Human()
         valid = True
       else:
         print "Please input a valid option."
