@@ -1,3 +1,6 @@
+from ai import *
+from human import *
+from board import *
 
 class Game(object):
   """
@@ -17,10 +20,10 @@ class Game(object):
     while not valid:
       entity = raw_input("Would you like player 1 to be a computer? [Y/n]")
       if entity.lower() == 'y':
-        player1 = AI()
+        self.player1 = AI()
         valid = True
       elif entity.lower() == 'n':
-        player1 = Human()
+        self.player1 = Human(1)
         valid = True
       else:
         print "Please input a valid option."
@@ -31,16 +34,20 @@ class Game(object):
     while not valid:
       entity = raw_input("Would you like player 2 to be a computer? [Y/n]")
       if entity.lower() == 'y':
-        player2 = AI()
+        self.player2 = AI()
         valid = True
       elif entity.lower() == 'n':
-        player2 = Human()
+        self.player2 = Human(2)
         valid = True
       else:
         print "Please input a valid option."
 
-    complete = false
+    print "Great!"
+
+    complete = False
     while not complete:
+      self.board = Board()
+      print self.board
       outcome = self.play_game()
       valid = False
       while not valid:
@@ -55,18 +62,23 @@ class Game(object):
 
 
   def play_game(self):
-    complete = false
+    complete = False
     while not complete:
       print "Player 1's turn!"
-      player1.nextmove(board)
-      print board
-      if board.check_win(1):
+      self.player1.next_move(self.board)
+      print self.board
+      print self.board.check_win(1)
+      if self.board.check_win(1)[0]:
         print "Player 1 wins!"
         return 1
 
       print "Player 2's turn!"
-      player2.nextmove(board)
-      print board
-      if board.check_win(2):
+      self.player2.next_move(self.board)
+      print self.board
+      if self.board.check_win(2)[0]:
         print "Player 2 wins!"
         return 2
+
+
+if __name__ == "__main__":
+    game = Game()

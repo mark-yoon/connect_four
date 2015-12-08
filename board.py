@@ -1,5 +1,5 @@
 
-class board(object):
+class Board(object):
   """
   Board object that holds the board state
   Connect 4 rules state a 6 x 7 board, but can be expansible
@@ -83,26 +83,5 @@ class board(object):
           self.player2_locs.append((x, y))
         return True
     return False
-
-  # def get_adj(self, x, y):
-  #   output = []
-  #   if x < self.x_max - 1:
-  #     output.append((x + 1, y))
-  #   if x > 0:
-  #     output.append((x - 1, y))
-  #   if y < self.y_max - 1:
-  #     output.append((x, y + 1))
-  #   if y > 0:
-  #     output.append((x, y - 1))
-  #   if x > 0 and y > 0:
-  #     output.append((x - 1, y - 1))
-  #   if x > 0 and y < self.y_max - 1:
-  #     output.append((x - 1, y + 1))
-  #   if x < self.x_max - 1 and y > 0:
-  #     output.append((x + 1, y - 1))
-  #   if x < self.x_max - 1 and y < self.y_max - 1:
-  #     output.append((x + 1, y + 1))
-  #   return output
-
 
 
