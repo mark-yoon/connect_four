@@ -59,8 +59,6 @@ def init():
   global board
   global turn
   global victory
-  global human
-  global ai
   global player1_locs
   global player2_locs
 
@@ -69,12 +67,12 @@ def init():
   board = Board()
   turn = 1
   victory = False
-  human = 0
-  ai = 0
   player1_locs = []
   player2_locs = []
 
 init()
+human = 0
+ai = 0
 
 while running: 
   screen.fill(white)
@@ -129,7 +127,8 @@ while running:
         create_text(screen, "font/mario.ttf", 25, "Your turn!", black, (400, 100))
       else:
         create_text(screen, "font/mario.ttf", 25, "AI's turn!", black, (400, 100))
-
+    create_text(screen, "font/mario.ttf", 25, "Human: " + str(human), black, (115 , 230))
+    create_text(screen, "font/mario.ttf", 25, "AI: " + str(ai), black, (700 , 230))
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
