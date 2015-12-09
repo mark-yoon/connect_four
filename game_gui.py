@@ -3,6 +3,8 @@ from human import *
 from board import *
 import pygame
 
+WHITE = (255,255, 255)
+
 class Game(object):
   """
   Game object that holds the state of the board and players' moves
@@ -15,6 +17,18 @@ class Game(object):
   turn_count = None
 
   def __init__(self):
+    pygame.init()
+    size = (800,600)
+    screen = pygame.display.set_mode(size)
+    screen.fill(WHITE)
+    pygame.display.set_caption("Connect 4")
+    running = True
+
+    while running: 
+      for event in pygame.event.get():
+        pass
+
+
     print "Welcome to CS 4701 Connect 4!"
     print "Please refer to Google regarding the rules of this game."
     valid = False

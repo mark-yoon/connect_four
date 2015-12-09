@@ -1,6 +1,7 @@
 from ai import *
 from human import *
 from board import *
+import pygame
 
 class Game(object):
   """
