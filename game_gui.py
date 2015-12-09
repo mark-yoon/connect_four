@@ -53,15 +53,28 @@ def create_rect(screen, rect, color, center, thickness):
   pygame.draw.rect(screen, color, rectangle, thickness)
   return rectangle
 
-player1 = Human(1)
-player2 = Human(2)
-board = Board()
-turn = 1
-victory = False
-human = 0
-ai = 0
-player1_locs = []
-player2_locs = []
+def init():
+  global player1
+  global player2
+  global board
+  global turn
+  global victory
+  global human
+  global ai
+  global player1_locs
+  global player2_locs
+
+  player1 = Human(1)
+  player2 = Human(2)
+  board = Board()
+  turn = 1
+  victory = False
+  human = 0
+  ai = 0
+  player1_locs = []
+  player2_locs = []
+
+init()
 
 while running: 
   screen.fill(white)
@@ -105,10 +118,12 @@ while running:
       game_rects.append(col)
 
     if victory:
+      create_text(screen, "font/mario.ttf", 25, "Try again?", black, (400, 175))
+      try_again = create_rect(screen, [10, 10, 200, 50], black, (400, 175), 1)
       if turn == 1:
-        create_text(screen, "font/mario.ttf", 25, "You won!!", black, (400, 100))
+        create_text(screen, "font/mario.ttf", 40, "You won!!", black, (400, 100))
       else:
-        create_text(screen, "font/mario.ttf", 25, "You lost...", black, (400, 100))
+        create_text(screen, "font/mario.ttf", 40, "You lost...", black, (400, 100))
     else:
       if turn == 1:
         create_text(screen, "font/mario.ttf", 25, "Your turn!", black, (400, 100))
@@ -121,7 +136,8 @@ while running:
         running = False
       elif event.type == pygame.MOUSEBUTTONDOWN:
         if victory:
-          pass
+          if try_again.collidepoint(event.pos):
+            init()
         else:
           for col in range(0, len(game_rects)):
             for rect in game_rects[col]:
