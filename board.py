@@ -81,7 +81,7 @@ class Board(object):
           self.player1_locs.append((x, y))
         else:
           self.player2_locs.append((x, y))
-        return True
-    return False
+        return (True, x, y)
+    return (False, -1, -1)
 
 
