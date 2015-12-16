@@ -112,7 +112,8 @@ while running:
           col.append(create_rect(screen, [10, 10, 99, 99], red, (x_center, y_center), 0))
         elif (i, j) in player2_locs:
           col.append(create_rect(screen, [10, 10, 99, 99], blue, (x_center, y_center), 0))
-        col.append(create_rect(screen, [10, 10, 100, 100], black, (x_center, y_center), 1))
+        else:
+          col.append(create_rect(screen, [10, 10, 100, 100], black, (x_center, y_center), 1))
       game_rects.append(col)
 
     if victory:
