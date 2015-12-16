@@ -73,6 +73,80 @@ class Board(object):
 
     return (False, player, [])
 
+  def threes(self, player):
+    if player == 1:
+      nodes = self.player1_locs
+    else:
+      nodes = self.player2_locs
+
+    output = []
+
+    for node in nodes:
+      x = node[0]
+      y = node[1]
+
+      if (x, y + 1) in nodes and (x, y + 2) in nodes:
+        output.append([(x, y), (x, y + 1), (x, y + 2)])
+
+      if (x, y - 1) in nodes and (x, y - 2) in nodes:
+        output.append([(x, y), (x, y - 1), (x, y - 2)])
+
+      if (x + 1, y) in nodes and (x + 2, y) in nodes:
+        output.append([(x, y), (x + 1, y), (x + 2, y)])
+
+      if (x - 1, y) in nodes and (x - 2, y) in nodes:
+        output.append([(x, y), (x - 1, y), (x - 2, y)])
+
+      if (x + 1, y + 1) in nodes and (x + 2, y + 2) in nodes:
+        output.append([(x, y), (x + 1, y + 1), (x + 2, y + 2)])
+
+      if (x - 1, y + 1) in nodes and (x - 2, y + 2) in nodes:
+        output.append([(x, y), (x - 1, y + 1), (x - 2, y + 2)])
+
+      if (x - 1, y - 1) in nodes and (x - 2, y - 2) in nodes:
+        output.append([(x, y), (x - 1, y - 1), (x - 2, y - 2)])
+
+      if (x + 1, y - 1) in nodes and (x + 2, y - 2) in nodes:
+        output.append([(x, y), (x + 1, y - 1), (x + 2, y - 2)])
+    return output
+
+  def twos(self, player):
+    if player == 1:
+      nodes = self.player1_locs
+    else:
+      nodes = self.player2_locs
+
+    output = []
+
+    for node in nodes:
+      x = node[0]
+      y = node[1]
+
+      if (x, y + 1) in nodes:
+        output.append([(x, y), (x, y + 1)])
+
+      if (x, y - 1) in nodes:
+        output.append([(x, y), (x, y - 1)])
+
+      if (x + 1, y) in nodes:
+        output.append([(x, y), (x + 1, y)])
+
+      if (x - 1, y) in nodes:
+        output.append([(x, y), (x - 1, y)])
+
+      if (x + 1, y + 1) in nodes:
+        output.append([(x, y), (x + 1, y + 1)])
+
+      if (x - 1, y + 1) in nodes:
+        output.append([(x, y), (x - 1, y + 1)])
+
+      if (x - 1, y - 1) in nodes:
+        output.append([(x, y), (x - 1, y - 1)])
+
+      if (x + 1, y - 1) in nodes:
+        output.append([(x, y), (x + 1, y - 1)])
+    return output
+
   def add(self, x, player):
     for y in range(self.y_max):
       if self.cells[y][x] == 0:
@@ -85,5 +159,3 @@ class Board(object):
         return (True, x, y)
     print self.cells
     return (False, -1, -1)
-
-
