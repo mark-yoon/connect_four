@@ -16,6 +16,10 @@ MENU = 0
 HUMAN_AI = 1
 AI_AI = 2
 
+# Heuristic enum types
+RANDOM = 1
+NAIVE = 2
+
 # Function definitions =========================================================
 # Initialize the game variables
 def init():
@@ -27,7 +31,7 @@ def init():
   global player1_locs
   global player2_locs
 
-  player2 = AI(2, False, 5, 3)
+  player2 = AI(2, False, 5, RANDOM)
   board = Board()
   turn = 1
   victory = False

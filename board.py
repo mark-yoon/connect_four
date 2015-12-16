@@ -149,6 +149,13 @@ class Board(object):
         output.append([(x, y), (x + 1, y - 1)])
     return output
 
+  def valid_moves(self):
+    moves = []
+    for x in range(self.x_max):
+      if self.cells[self.y_max - 1][x] == 0:
+        moves.append(x)
+    return moves
+
   def add(self, x, player):
     for y in range(self.y_max):
       if self.cells[y][x] == 0:
@@ -157,7 +164,5 @@ class Board(object):
           self.player1_locs.append((x, y))
         else:
           self.player2_locs.append((x, y))
-        print self.cells
         return (True, x, y)
-    print self.cells
     return (False, -1, -1)

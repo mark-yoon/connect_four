@@ -1,25 +1,27 @@
 import board
 import time
 import sys
+import random
 
 class AI(object):
-  total_wins = 0
 
   def __init__(self, player_num, is_pruning, search_depth, heuristic):
-    self.total_wins = 0
     self.player_num = player_num
     # If true, will perform alpha-beta pruning when doing minimax
     self.is_pruning = is_pruning
     # Trees will be created with max depth search_depth
     self.search_depth = search_depth
-    # Represents heuristic used in minimax, 3 corresponds to naive
+    # Represents heuristic used in minimax
     self.heuristic = heuristic
 
   def next_move(self, board):
     # Returns a next move as an integer representing the column
-    if self.heuristic == 3:
+    if self.heuristic == 1:
+      return self.random(board)
+    elif self.heuristic == 2:
       return self.naive(board)
-    return self.minimax(board)
+    else:
+      return self.minimax(board)
 
   def minimax(self, board):
     # Performs minimax algorithm on board state tree
@@ -42,19 +44,23 @@ class AI(object):
             if get_value(board, cur_col) > max_value:
               return cur_col
 
+  def random(self, board):
+    moves = board.valid_moves()
+    return random.choice(moves)
+
   def naive(self, board):
     # Naive algorithm for ai
     return 1
 
-  def get_value(self, board, column):
-    # Gives value of move specified by column on board board
-    # Applies move column to board (undo move afterwards) then calculates its value
-    if self.heuristic == 1:
-      # 4 in a row has value of infinity
-      # value = #{3 in a row} * 100 +  #{2 in a row} * 10
-      revert = board
+  # def get_value(self, board, column):
+  #   # Gives value of move specified by column on board board
+  #   # Applies move column to board (undo move afterwards) then calculates its value
+  #   if self.heuristic == 1:
+  #     # 4 in a row has value of infinity
+  #     # value = #{3 in a row} * 100 +  #{2 in a row} * 10
+  #     revert = board
 
-      // "Apply move to board"
-      // "Check value of board"
+  #     // "Apply move to board"
+  #     // "Check value of board"
 
 
