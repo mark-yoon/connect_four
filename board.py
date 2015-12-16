@@ -73,6 +73,7 @@ class Board(object):
 
     return (False, player, [])
 
+  # Returns a list of list of three-in-a-row pairs for player player
   def threes(self, player):
     if player == 1:
       nodes = self.player1_locs
@@ -110,6 +111,7 @@ class Board(object):
         output.append([(x, y), (x + 1, y - 1), (x + 2, y - 2)])
     return output
 
+  # Returns a list of list of two-in-a-row pairs for player player
   def twos(self, player):
     if player == 1:
       nodes = self.player1_locs

@@ -27,7 +27,7 @@ def init():
   global player1_locs
   global player2_locs
 
-  player2 = AI()
+  player2 = AI(2, False, 5, 3)
   board = Board()
   turn = 1
   victory = False
