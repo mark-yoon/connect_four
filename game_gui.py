@@ -74,7 +74,7 @@ init()
 human = 0
 ai = 0
 
-while running: 
+while running:
   screen.fill(white)
   if game_state == 0:
     play_rect = create_rect(screen, [10, 10, 200, 100], black, (400, 450), 1)
@@ -142,6 +142,7 @@ while running:
             for rect in game_rects[col]:
               if rect.collidepoint(event.pos):
                 add = board.add(col, turn)
+                print col
                 if add[0]:
                   if turn == 1:
                     player1_locs.append((add[1], add[2]))
@@ -160,6 +161,5 @@ while running:
                     else:
                       turn = 1
                 else:
-                  # Display invalid column here
-                  pass
+                  print "JEBGBGOASBGGSGUASBF"
     pygame.display.update()

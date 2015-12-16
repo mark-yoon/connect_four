@@ -11,10 +11,10 @@ class Board(object):
   x_max = None
   y_max = None
 
-  def __init__(self, x = 6, y = 7):
+  def __init__(self, x = 7, y = 6):
     self.x_max = x
     self.y_max = y
-    self.cells = [[0 for x in range(self.x_max)] for x in range(self.y_max)]
+    self.cells = [[0 for i in range(self.x_max)] for j in range(self.y_max)]
     self.player1_locs = []
     self.player2_locs = []
 
@@ -74,9 +74,9 @@ class Board(object):
     return (False, player, [])
 
   def add(self, x, player):
-    for y in range(0, self.y_max):
-      if self.cells[x][y] == 0:
-        self.cells[x][y] = player
+    for y in range(self.y_max):
+      if self.cells[y][x] == 0:
+        self.cells[y][x] = player
         if player == 1:
           self.player1_locs.append((x, y))
         else:
