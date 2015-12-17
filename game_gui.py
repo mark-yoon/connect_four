@@ -465,6 +465,8 @@ while running:
           if victory:
             if try_again.collidepoint(event.pos):
               play_init()
+            elif back_rect.collidepoint(event.pos):
+              game_state = SUBMENU_PLAY
           elif back_rect.collidepoint(event.pos):
             game_state = SUBMENU_PLAY
           else:
@@ -492,6 +494,9 @@ while running:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+          if back_rect.collidepoint(event.pos):
+              game_state = SUBMENU_PLAY
 
       col = player2.next_move(board)
       print board
@@ -508,7 +513,7 @@ while running:
 
   elif game_state == AI_AI:
     game_rects = draw_game_boxes(0, 900, w_player1_locs, w_player2_locs)
-    try_again = draw_game_text(victory, turn, invalid_move, False)
+    (try_again, back_rect) = draw_game_text(w_victory, w_turn, invalid_move, False)
     pygame.display.update()
 
     if w_turn == 1:
@@ -516,6 +521,9 @@ while running:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+          if back_rect.collidepoint(event.pos):
+            game_state = SUBMENU_WATCH
 
       col = w_player1.next_move(w_board)
       add = w_board.add(col, 1)
@@ -524,7 +532,7 @@ while running:
         if w_board.check_win(w_turn)[0]:
           w_victory = w_turn
           w_ai1 += 1
-          w_turn = 1
+          w_turn = 3
         else:
           w_turn = 2
 
@@ -533,6 +541,9 @@ while running:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+          if back_rect.collidepoint(event.pos):
+            game_state = SUBMENU_WATCH
 
       col = w_player2.next_move(w_board)
       add = w_board.add(col, 2)
@@ -541,8 +552,23 @@ while running:
         if w_board.check_win(w_turn)[0]:
           w_victory = w_turn
           w_ai2 += 1
-          w_turn = 1
+          w_turn = 3
         else:
           w_turn = 1
+
+    if w_turn == 3:
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+          # If player has won, if user clicks try again, reinitialize game
+          if w_victory:
+            if try_again.collidepoint(event.pos):
+              watch_init()
+              w_turn = 1
+            elif back_rect.collidepoint(event.pos):
+              game_state = SUBMENU_WATCH
+          elif back_rect.collidepoint(event.pos):
+            game_state = SUBMENU_WATCH
 
     pygame.display.update()
