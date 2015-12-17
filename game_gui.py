@@ -18,7 +18,8 @@ AI_AI = 2
 
 # Heuristic enum types
 RANDOM = 1
-NAIVE = 2
+MINIMAX = 2
+
 
 # Function definitions =========================================================
 # Initialize the game variables
@@ -31,7 +32,7 @@ def init():
   global player1_locs
   global player2_locs
 
-  player2 = AI(2, False, 5, RANDOM)
+  player2 = AI(2, False, 5, MINIMAX)
   board = Board()
   turn = 1
   victory = False
@@ -178,6 +179,7 @@ while running:
           running = False
 
       col = player2.next_move(board)
+      print board
       add = board.add(col, 2)
       if add[0]:
         invalid_move = False

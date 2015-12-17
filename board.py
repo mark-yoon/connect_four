@@ -73,6 +73,8 @@ class Board(object):
 
     return (False, player, [])
 
+# IMPORTANT NEED TO COUNT DISJOINT SETS
+
   def fours(self, player):
     if player == 1:
       nodes = self.player1_locs
@@ -116,11 +118,11 @@ class Board(object):
       x = node[0]
       y = node[1]
 
-      if (x, y + 1) in nodes and (x, y + 2) in nodes and (x, y + 3) not in nodes and x, y - 1) not in nodes:
+      if (x, y + 1) in nodes and (x, y + 2) in nodes and (x, y + 3) not in nodes and (x, y - 1) not in nodes:
         row = [(x, y), (x, y + 1), (x, y + 2)]
         output.append(row)
 
-      if (x + 1, y) in nodes and (x + 2, y) in nodes and (x + 3, y) not in nodes, and (x - 1, y) not in nodes:
+      if (x + 1, y) in nodes and (x + 2, y) in nodes and (x + 3, y) not in nodes and (x - 1, y) not in nodes:
         row = [(x, y), (x + 1, y), (x + 2, y)]
         output.append(row)
 
