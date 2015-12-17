@@ -26,10 +26,10 @@ AI_AI = 4
 
 
 # Heuristic enum types
-BALANCED = 1
-OFFENSIVE = 2
-DEFENSIVE = 3
-RANDOM = 4
+RANDOM = 1
+BALANCED = 2
+OFFENSIVE = 3
+DEFENSIVE = 4
 
 # Depth enum types
 SHALLOW = 1
@@ -118,8 +118,8 @@ def sub_menu(state):
     create_text(screen, fontname, 25, "DEEP", black, (x_off+button_offset*2, depth_row))
 
   heur_row = screen.get_rect().centery -185
-  x_off = 320 
-  create_text(screen, fontname_d, 35, "Heuristic:", black, (screen.get_rect().centerx -260, heur_row))  
+  x_off = 320
+  create_text(screen, fontname_d, 35, "Heuristic:", black, (screen.get_rect().centerx -260, heur_row))
   if ai_a_heur is BALANCED:
     bal_a_rect = create_rect(screen, [20, 10, 160, 50], red, (x_off, heur_row), 0)
     create_text(screen, fontname, 25, "BALANCED", white, (x_off, heur_row))
@@ -211,8 +211,7 @@ screen = pygame.display.set_mode(size)
 screen.fill(white)
 pygame.display.set_caption("Connect 4")
 running = True
-# game_state = MENU
-game_state = SUBMENU_PLAY
+game_state = MENU
 
 # Initialize the game states
 init()
