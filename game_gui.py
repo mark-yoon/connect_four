@@ -146,14 +146,70 @@ def sub_menu(state):
     create_text(screen, fontname, 25, "RANDOM", black, (x_off+button_offset, heur_row +70))
 
   if state == SUBMENU_WATCH:
-    y_off = 200
+    create_text(screen, fontname_b, 45, "VS.", black, (center[0], center[1]+y_off))
+
+    y_off = 350
     # More buttonz
+    depth_row = screen.get_rect().centery -270 +y_off
+    button_offset = 180
+    x_off = 280
+    create_text(screen, fontname_d, 35, "Depth:", black, (screen.get_rect().centerx -280, depth_row))
+    if ai_b_depth is SHALLOW:
+      shal_b_rect = create_rect(screen, [20, 10, 160, 50], red, (x_off, depth_row), 0)
+      create_text(screen, fontname, 25, "SHALLOW", white, (x_off, depth_row))
+    else:
+      shal_b_rect = create_rect(screen, [20, 10, 160, 50], black, (x_off, depth_row), 1)
+      create_text(screen, fontname, 25, "SHALLOW", black, (x_off, depth_row))
+    if ai_b_depth is NORMAL:
+      norm_b_rect = create_rect(screen, [20, 10, 160, 50], blue, (x_off+button_offset, depth_row), 0)
+      create_text(screen, fontname, 25, "NORMAL", white, (x_off+button_offset, depth_row))
+    else:
+      norm_b_rect = create_rect(screen, [20, 10, 160, 50], black, (x_off+button_offset, depth_row), 1)
+      create_text(screen, fontname, 25, "NORMAL", black, (x_off+button_offset, depth_row))
+    if ai_b_depth is DEEP:
+      deep_b_rect = create_rect(screen, [20, 10, 160, 50], green, (x_off+button_offset*2, depth_row), 0)
+      create_text(screen, fontname, 25, "DEEP", white, (x_off+button_offset*2, depth_row))
+    else:
+      deep_b_rect = create_rect(screen, [20, 10, 160, 50], black, (x_off+button_offset*2, depth_row), 1)
+      create_text(screen, fontname, 25, "DEEP", black, (x_off+button_offset*2, depth_row))
+
+    heur_row = screen.get_rect().centery -185 +y_off
+    x_off = 320
+    create_text(screen, fontname_d, 35, "Heuristic:", black, (screen.get_rect().centerx -260, heur_row))
+    if ai_b_heur is BALANCED:
+      bal_b_rect = create_rect(screen, [20, 10, 160, 50], red, (x_off, heur_row), 0)
+      create_text(screen, fontname, 25, "BALANCED", white, (x_off, heur_row))
+    else:
+      bal_b_rect = create_rect(screen, [20, 10, 160, 50], black, (x_off, heur_row), 1)
+      create_text(screen, fontname, 25, "BALANCED", black, (x_off, heur_row))
+    if ai_b_heur is OFFENSIVE:
+      off_b_rect = create_rect(screen, [20, 10, 160, 50], blue, (x_off+button_offset, heur_row), 0)
+      create_text(screen, fontname, 25, "OFFENSIVE", white, (x_off+button_offset, heur_row))
+    else:
+      off_b_rect = create_rect(screen, [20, 10, 160, 50], black, (x_off+button_offset, heur_row), 1)
+      create_text(screen, fontname, 25, "OFFENSIVE", black, (x_off+button_offset, heur_row))
+    if ai_b_heur is DEFENSIVE:
+      def_b_rect = create_rect(screen, [20, 10, 160, 50], green, (x_off, heur_row +70), 0)
+      create_text(screen, fontname, 25, "DEFENSIVE", white, (x_off, heur_row +70))
+    else:
+      def_b_rect = create_rect(screen, [20, 10, 160, 50], black, (x_off, heur_row +70), 1)
+      create_text(screen, fontname, 25, "DEFENSIVE", black, (x_off, heur_row +70))
+    if ai_b_heur is RANDOM:
+      rand_b_rect = create_rect(screen, [20, 10, 160, 50], orange, (x_off+button_offset, heur_row +70), 0)
+      create_text(screen, fontname, 25, "RANDOM", white, (x_off+button_offset, heur_row +70))
+    else:
+      rand_b_rect = create_rect(screen, [20, 10, 160, 50], black, (x_off+button_offset, heur_row +70), 1)
+      create_text(screen, fontname, 25, "RANDOM", black, (x_off+button_offset, heur_row +70))
+    y_off = 300
 
   create_text(screen, fontname, 25, "PLAY", black, (center[0]+30, center[1]+100+y_off))
   go_rect = create_rect(screen, [10, 10, 180, 60], black, (center[0]+30, center[1]+100+y_off), 1)
   create_text(screen, fontname, 25, "<", black, (center[0]-105, center[1]+100+y_off))
   back_rect = create_rect(screen, [10, 10, 60, 60], black, (center[0]-105, center[1]+100+y_off), 1)
 
+  if state == SUBMENU_WATCH:
+    return [go_rect, [bal_a_rect, off_a_rect, def_a_rect, rand_a_rect],[shal_a_rect, norm_a_rect, deep_a_rect],
+      [bal_b_rect, off_b_rect, def_b_rect, rand_b_rect],[shal_b_rect, norm_b_rect, deep_b_rect], back_rect]  
   return [go_rect, [bal_a_rect, off_a_rect, def_a_rect, rand_a_rect],[shal_a_rect, norm_a_rect, deep_a_rect],back_rect]
 
 def draw_game_boxes(x_center, y_center):
@@ -350,7 +406,7 @@ while running:
         elif deep_depth_rect_b.collidepoint(event.pos):
           ai_b_depth = DEEP
 
-      pygame.dislay.update()
+      pygame.display.update()
 
 
   # Play game scene
