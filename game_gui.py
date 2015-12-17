@@ -193,7 +193,7 @@ def draw_game_text(victory, turn, invalid_move):
         create_text(screen, fontname, 40, "You lost...", black, (400, 100))
     create_text(screen, fontname, 25, "Human: " + str(human), black, (115 , 230))
     create_text(screen, fontname, 25, "AI: " + str(ai), black, (700 , 230))
-    return try_again
+    return [try_again, back_rect]
   else:
     if turn == 1:
       create_text(screen, fontname_b, 45, "Your turn!", black, (400, 100))
@@ -201,6 +201,10 @@ def draw_game_text(victory, turn, invalid_move):
       create_text(screen, fontname_b, 45, "AI's turn!", black, (400, 100))
     create_text(screen, fontname, 25, "Human: " + str(human), black, (115 , 230))
     create_text(screen, fontname, 25, "AI: " + str(ai), black, (700 , 230))
+  # Back Button
+  create_text(screen, fontname, 25, "<", black, (80, 100))
+  back_rect = create_rect(screen, [10, 10, 60, 60], black, (80, 100), 1)
+  return ['should not be accessed', back_rect]
 
 # Main =========================================================================
 
@@ -303,7 +307,7 @@ while running:
     norm_depth_rect_b = buttons[4][1]
     deep_depth_rect_b = buttons[4][2]
 
-    # back_rect = buttons[5]
+    back_rect = buttons[5]
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
@@ -355,7 +359,8 @@ while running:
   # Play game scene
   elif game_state == HUMAN_AI:
     game_rects = draw_game_boxes(0, 900)
-    try_again = draw_game_text(victory, turn, invalid_move)
+    try_again = draw_game_text(victory, turn, invalid_move)[0]
+    back_rect = draw_game_text(victory, turn, invalid_move)[1]
     pygame.display.update()
 
     if turn == 1:
@@ -368,6 +373,8 @@ while running:
           if victory:
             if try_again.collidepoint(event.pos):
               init()
+          elif back_rect.collidepoint(event.pos):
+            game_state = SUBMENU_PLAY
           else:
             # Check which column was clicked
             for col in range(0, len(game_rects)):
