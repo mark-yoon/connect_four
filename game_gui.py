@@ -176,6 +176,9 @@ def draw_game_boxes(x_center, y_center):
   return game_rects
 
 def draw_game_text(victory, turn, invalid_move):
+  # Back Button
+  create_text(screen, fontname, 25, "<", black, (80, 100))
+  back_rect = create_rect(screen, [10, 10, 60, 60], black, (80, 100), 1)
   if invalid_move:
     if turn == 1:
       create_text(screen, fontname, 25, "Your turn!", black, (400, 100))
@@ -201,9 +204,6 @@ def draw_game_text(victory, turn, invalid_move):
       create_text(screen, fontname_b, 45, "AI's turn!", black, (400, 100))
     create_text(screen, fontname, 25, "Human: " + str(human), black, (115 , 230))
     create_text(screen, fontname, 25, "AI: " + str(ai), black, (700 , 230))
-  # Back Button
-  create_text(screen, fontname, 25, "<", black, (80, 100))
-  back_rect = create_rect(screen, [10, 10, 60, 60], black, (80, 100), 1)
   return ['should not be accessed', back_rect]
 
 # Main =========================================================================
@@ -314,10 +314,9 @@ while running:
         running = False
       elif event.type == pygame.MOUSEBUTTONDOWN:
         if go_rect.collidepoint(event.pos):
+          player1 = AI(1, False, ai_b_depth, ai_b_heur)
           player2 = AI(2, False, ai_a_depth, ai_a_heur)
-          # Create AI B here once watching has been implemented
-          # HERE
-          game_state = HUMAN_AI
+          game_state = AI_AI
 
         # Options for A
         elif bal_heur_rect_a.collidepoint(event.pos):
@@ -397,6 +396,49 @@ while running:
 
     elif turn == 2:
       # Bot turn
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          running = False
+
+      col = player2.next_move(board)
+      print board
+      add = board.add(col, 2)
+      if add[0]:
+        invalid_move = False
+        player2_locs.append((add[1], add[2]))
+        if board.check_win(turn)[0]:
+          victory = turn
+          ai += 1
+          turn = 1
+        else:
+          turn = 1
+
+  elif game_state == AI_AI:
+    game_rects = draw_game_boxes(0, 900)
+    try_again = draw_game_text(victory, turn, invalid_move)
+    pygame.display.update()
+
+    if turn == 1:
+      # Bot a turn
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          running = False
+
+      col = player1.next_move(board)
+      print board
+      add = board.add(col, 1)
+      if add[0]:
+        invalid_move = False
+        player1_locs.append((add[1], add[2]))
+        if board.check_win(turn)[0]:
+          victory = turn
+          human += 1
+          turn = 1
+        else:
+          turn = 2
+
+    elif turn == 2:
+      # Bot b turn
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           running = False
