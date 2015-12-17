@@ -21,65 +21,30 @@ class AI(object):
       return self.random(board)
     else:
       board_copy = copy.deepcopy(board)
-      print self.get_move(board_copy, 5, self.player_num)[0]
-      return self.get_move(board_copy, 5, self.player_num)[0]
-
-  def minimax(self, board):
-    # Performs minimax algorithm on board state tree
-    # Max and min values for each state tree
-    max_score = sys.maxint
-    min_score = -max_score - 1
-
-    # Perform alpha-beta pruning
-    if self.is_pruning:
-      # TODO
-      return
-    else:
-      # Expand tree from current state node
-      for cur_depth in range(self.search_depth):
-        max_value = 0
-        for cur_col in range(board.x_max):
-          # All possible moves (not filled column)
-          if not board.cells[cur_col][board.y_max] is 0:
-            # Return greatest value path
-            if get_value(board, cur_col) > max_value:
-              return cur_col
+      return self.minimax(board_copy, 5, self.player_num)[0]
 
   def random(self, board):
     moves = board.valid_moves()
     return random.choice(moves)
 
-  def naive(self, board):
-    # Naive algorithm for ai
-    return 1
-
-  # def get_value(self, board, column):
-  #   # Gives value of move specified by column on board board
-  #   # Applies move column to board (undo move afterwards) then calculates its value
-  #   if self.heuristic == 1:
-  #     # 4 in a row has value of infinity
-  #     # value = #{3 in a row} * 100 +  #{2 in a row} * 10
-  #     revert = board
-
-  #     // "Apply move to board"
-  #     // "Check value of board"
-
-
-  def get_move(self, board, depth, player_num):
+  def minimax(self, board, depth, player_num):
+    # Set player values
     if player_num == 1:
       opp_num = 2
     else:
       opp_num = 1
 
+    # Start search for each valid move
     possible_moves = [0 for i in range(board.x_max)]
     for col in board.valid_moves():
       board_copy = copy.deepcopy(board)
       board_copy.add(col, player_num)
       possible_moves[col] = -self.search(board_copy, depth - 1, opp_num)
 
+    # Take the move with the highest value
     h = max(possible_moves)
     move = possible_moves.index(h)
-
+    print (move, h)
     return (move, h)
 
   def search(self, board, depth, player_num):
@@ -88,15 +53,18 @@ class AI(object):
     else:
       opp_num = 1
 
+    # Check if leaf
     if depth == 0 or len(board.valid_moves()) == 0 or board.check_win(player_num)[0] or board.check_win(opp_num)[0]:
       return self.eval_board(board, player_num)
 
+    # Get all possible board states from the given board
     possible_moves = []
     for col in board.valid_moves():
       board_copy = copy.deepcopy(board)
       board_copy.add(col, player_num)
       possible_moves.append(board_copy)
 
+    # Run search recursively
     h = float("-inf")
     for move in possible_moves:
       h = max(h, -self.search(move, depth - 1, opp_num))

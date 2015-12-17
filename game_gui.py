@@ -34,10 +34,10 @@ def init():
   global player1_locs
   global player2_locs
 
-  player2 = AI(2, False, 5, MINIMAX)
+  player2 = AI(2, False, 3, MINIMAX)
   board = Board()
   turn = 1
-  victory = False
+  victory = 0
   player1_locs = []
   player2_locs = []
   invalid_move = False
@@ -96,10 +96,10 @@ def draw_game_text(victory, turn, invalid_move):
     create_text(screen, "font/mario.ttf", 25, "Invalid move!", black, (400, 175))
     create_text(screen, "font/mario.ttf", 25, "Human: " + str(human), black, (115 , 230))
     create_text(screen, "font/mario.ttf", 25, "AI: " + str(ai), black, (700 , 230))
-  elif victory:
+  elif victory != 0:
     create_text(screen, "font/mario.ttf", 25, "Try again?", black, (400, 175))
     try_again = create_rect(screen, [10, 10, 200, 50], black, (400, 175), 1)
-    if turn == 1:
+    if victory == 1:
       create_text(screen, "font/mario.ttf", 40, "You won!!", black, (400, 100))
     else:
         create_text(screen, "font/mario.ttf", 40, "You lost...", black, (400, 100))
@@ -155,6 +155,7 @@ while running:
   elif game_state == HUMAN_AI:
     game_rects = draw_game_boxes(0, 900)
     try_again = draw_game_text(victory, turn, invalid_move)
+    pygame.display.update()
 
     if turn == 1:
       # Human turn
@@ -179,7 +180,7 @@ while running:
                     player1_locs.append((add[1], add[2]))
                     # If win, mark victory as true, change turn otherwise
                     if board.check_win(turn)[0]:
-                      victory = True
+                      victory = turn
                       human += 1
                     else:
                       turn = 2
@@ -199,7 +200,7 @@ while running:
         invalid_move = False
         player2_locs.append((add[1], add[2]))
         if board.check_win(turn)[0]:
-          victory = True
+          victory = turn
           ai += 1
           turn = 1
         else:
