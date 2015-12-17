@@ -32,13 +32,13 @@ OFFENSIVE = 3
 DEFENSIVE = 4
 
 # Depth enum types
-SHALLOW = 1
-NORMAL = 3
-DEEP = 5
+SHALLOW = 4
+NORMAL = 5
+DEEP = 6
 
 # Function definitions =========================================================
 # Initialize the game variables
-def init():
+def play_init():
   global player2
   global board
   global turn
@@ -53,6 +53,22 @@ def init():
   player1_locs = []
   player2_locs = []
   invalid_move = False
+
+def watch_init():
+  global w_player1
+  global w_player2
+  global w_board
+  global w_turn
+  global w_invalid_move
+  global w_victory
+  global w_player1_locs
+  global w_player2_locs
+
+  w_board = Board()
+  w_turn = 1
+  w_victory = 0
+  w_player1_locs = []
+  w_player2_locs = []
 
 # Function to create a text string in the game
 def create_text(screen, font_path, size, text, color, center):
@@ -209,10 +225,10 @@ def sub_menu(state):
 
   if state == SUBMENU_WATCH:
     return [go_rect, [bal_a_rect, off_a_rect, def_a_rect, rand_a_rect],[shal_a_rect, norm_a_rect, deep_a_rect],
-      [bal_b_rect, off_b_rect, def_b_rect, rand_b_rect],[shal_b_rect, norm_b_rect, deep_b_rect], back_rect]  
+      [bal_b_rect, off_b_rect, def_b_rect, rand_b_rect],[shal_b_rect, norm_b_rect, deep_b_rect], back_rect]
   return [go_rect, [bal_a_rect, off_a_rect, def_a_rect, rand_a_rect],[shal_a_rect, norm_a_rect, deep_a_rect],back_rect]
 
-def draw_game_boxes(x_center, y_center):
+def draw_game_boxes(x_center, y_center, player1_locs, player2_locs):
   game_rects = []
   for i in range(0, 7):
     x_center += 100
@@ -229,36 +245,52 @@ def draw_game_boxes(x_center, y_center):
     game_rects.append(col)
   return game_rects
 
-def draw_game_text(victory, turn, invalid_move):
+def draw_game_text(victory, turn, invalid_move, play):
+  if play:
+    player1_text = "Your turn!"
+    player2_text = "AI's turn!"
+    player1_counter = "Human: " + str(human)
+    player2_counter = "AI: " + str(ai)
+    win_text = "You won!!"
+    loss_text = "You lost..."
+
+  else:
+    player1_text = "AI 1's turn!"
+    player2_text = "AI 2's turn!"
+    player1_counter = "AI 1: " + str(w_ai1)
+    player2_counter = "AI 2: " + str(w_ai2)
+    win_text = "AI 1 won!!"
+    loss_text = "AI 2 won!!"
+
   # Back Button
   create_text(screen, fontname, 25, "<", black, (80, 100))
   back_rect = create_rect(screen, [10, 10, 60, 60], black, (80, 100), 1)
   if invalid_move:
     if turn == 1:
-      create_text(screen, fontname, 25, "Your turn!", black, (400, 100))
+      create_text(screen, fontname, 25, player1_text, black, (400, 100))
     else:
-      create_text(screen, fontname, 25, "AI's turn!", black, (400, 100))
+      create_text(screen, fontname, 25, player2_text, black, (400, 100))
     create_text(screen, fontname, 25, "Invalid move!", black, (400, 175))
-    create_text(screen, fontname, 25, "Human: " + str(human), black, (115 , 230))
-    create_text(screen, fontname, 25, "AI: " + str(ai), black, (700 , 230))
+    create_text(screen, fontname, 25, player1_counter, black, (115 , 230))
+    create_text(screen, fontname, 25, player2_counter, black, (700 , 230))
   elif victory != 0:
     create_text(screen, fontname, 25, "Try again?", black, (400, 175))
     try_again = create_rect(screen, [10, 10, 200, 50], black, (400, 175), 1)
     if victory == 1:
-      create_text(screen, fontname, 40, "You won!!", black, (400, 100))
+      create_text(screen, fontname, 40, win_text, black, (400, 100))
     else:
-        create_text(screen, fontname, 40, "You lost...", black, (400, 100))
-    create_text(screen, fontname, 25, "Human: " + str(human), black, (115 , 230))
-    create_text(screen, fontname, 25, "AI: " + str(ai), black, (700 , 230))
-    return [try_again, back_rect]
+        create_text(screen, fontname, 40, loss_text, black, (400, 100))
+    create_text(screen, fontname, 25, player1_counter, black, (115 , 230))
+    create_text(screen, fontname, 25, player2_counter, black, (700 , 230))
+    return (try_again, back_rect)
   else:
     if turn == 1:
-      create_text(screen, fontname_b, 45, "Your turn!", black, (400, 100))
+      create_text(screen, fontname_b, 45, player1_text, black, (400, 100))
     else:
-      create_text(screen, fontname_b, 45, "AI's turn!", black, (400, 100))
-    create_text(screen, fontname, 25, "Human: " + str(human), black, (115 , 230))
-    create_text(screen, fontname, 25, "AI: " + str(ai), black, (700 , 230))
-  return ['should not be accessed', back_rect]
+      create_text(screen, fontname_b, 45, player2_text, black, (400, 100))
+    create_text(screen, fontname, 25, player1_counter, black, (115 , 230))
+    create_text(screen, fontname, 25, player2_counter, black, (700 , 230))
+  return ('should not be accessed', back_rect)
 
 # Main =========================================================================
 
@@ -272,14 +304,24 @@ running = True
 game_state = MENU
 
 # Initialize the game states
-init()
+play_init()
+watch_init()
+
+# Win counters
 human = 0
 ai = 0
+w_ai1 = 0
+w_ai2 = 0
+
+# Default settings
 ai_a_depth = NORMAL
 ai_a_heur = BALANCED
 ai_b_depth = NORMAL
 ai_b_heur = BALANCED
 player2 = AI(2, False, ai_a_depth, ai_a_heur)
+
+w_player1 = AI(1, False, ai_a_depth, ai_a_heur)
+w_player2 = AI(2, False, ai_a_depth, ai_a_heur)
 
 while running:
   screen.fill(white)
@@ -300,7 +342,6 @@ while running:
 
   # Play submenu screen
   elif game_state == SUBMENU_PLAY:
-    sub_menu(game_state)
     buttons = sub_menu(game_state)
     go_rect = buttons[0]
     bal_heur_rect = buttons[1][0]
@@ -334,7 +375,7 @@ while running:
         elif deep_depth_rect.collidepoint(event.pos):
           ai_a_depth = DEEP
         elif back_rect.collidepoint(event.pos):
-          game_state = DEEP
+          game_state = MENU
 
       pygame.display.update()
 
@@ -368,8 +409,8 @@ while running:
         running = False
       elif event.type == pygame.MOUSEBUTTONDOWN:
         if go_rect.collidepoint(event.pos):
-          player1 = AI(1, False, ai_b_depth, ai_b_heur)
-          player2 = AI(2, False, ai_a_depth, ai_a_heur)
+          w_player1 = AI(1, False, ai_a_depth, ai_a_heur)
+          w_player2 = AI(2, False, ai_b_depth, ai_b_heur)
           game_state = AI_AI
 
         # Options for A
@@ -408,12 +449,10 @@ while running:
 
       pygame.display.update()
 
-
   # Play game scene
   elif game_state == HUMAN_AI:
-    game_rects = draw_game_boxes(0, 900)
-    try_again = draw_game_text(victory, turn, invalid_move)[0]
-    back_rect = draw_game_text(victory, turn, invalid_move)[1]
+    game_rects = draw_game_boxes(0, 900, player1_locs, player2_locs)
+    (try_again, back_rect) = draw_game_text(victory, turn, invalid_move, True)
     pygame.display.update()
 
     if turn == 1:
@@ -425,7 +464,7 @@ while running:
           # If player has won, if user clicks try again, reinitialize game
           if victory:
             if try_again.collidepoint(event.pos):
-              init()
+              play_init()
           elif back_rect.collidepoint(event.pos):
             game_state = SUBMENU_PLAY
           else:
@@ -468,46 +507,42 @@ while running:
           turn = 1
 
   elif game_state == AI_AI:
-    game_rects = draw_game_boxes(0, 900)
-    try_again = draw_game_text(victory, turn, invalid_move)
+    game_rects = draw_game_boxes(0, 900, w_player1_locs, w_player2_locs)
+    try_again = draw_game_text(victory, turn, invalid_move, False)
     pygame.display.update()
 
-    if turn == 1:
+    if w_turn == 1:
       # Bot a turn
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           running = False
 
-      col = player1.next_move(board)
-      print board
-      add = board.add(col, 1)
+      col = w_player1.next_move(w_board)
+      add = w_board.add(col, 1)
       if add[0]:
-        invalid_move = False
-        player1_locs.append((add[1], add[2]))
-        if board.check_win(turn)[0]:
-          victory = turn
-          human += 1
-          turn = 1
+        w_player1_locs.append((add[1], add[2]))
+        if w_board.check_win(w_turn)[0]:
+          w_victory = w_turn
+          w_ai1 += 1
+          w_turn = 1
         else:
-          turn = 2
+          w_turn = 2
 
-    elif turn == 2:
+    elif w_turn == 2:
       # Bot b turn
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           running = False
 
-      col = player2.next_move(board)
-      print board
-      add = board.add(col, 2)
+      col = w_player2.next_move(w_board)
+      add = w_board.add(col, 2)
       if add[0]:
-        invalid_move = False
-        player2_locs.append((add[1], add[2]))
-        if board.check_win(turn)[0]:
-          victory = turn
-          ai += 1
-          turn = 1
+        w_player2_locs.append((add[1], add[2]))
+        if w_board.check_win(w_turn)[0]:
+          w_victory = w_turn
+          w_ai2 += 1
+          w_turn = 1
         else:
-          turn = 1
+          w_turn = 1
 
     pygame.display.update()

@@ -22,13 +22,13 @@ class AI(object):
     # Balanced heuristic
     if self.heuristic == 2:
       board_copy = copy.deepcopy(board)
-      return self.minimax(board_copy, 5, self.player_num, self.balanced)[0]
+      return self.minimax(board_copy, self.search_depth, self.player_num, self.balanced)[0]
     if self.heuristic == 3:
       board_copy = copy.deepcopy(board)
-      return self.minimax(board_copy, 5, self.player_num, self.offensive)[0]
+      return self.minimax(board_copy, self.search_depth, self.player_num, self.offensive)[0]
     if self.heuristic == 4:
       board_copy = copy.deepcopy(board)
-      return self.minimax(board_copy, 5, self.player_num, self.defensive)[0]
+      return self.minimax(board_copy, self.search_depth, self.player_num, self.defensive)[0]
 
   def random(self, board):
     moves = board.valid_moves()
