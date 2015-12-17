@@ -20,18 +20,17 @@ class Board(object):
 
   def __str__(self):
     print " 0 1 2 3 4 5 6 "
-    for x in range(0, len(self.cells[0])):
-      x = self.x_max - x - 1
+    for row in reversed(self.cells):
       output = ''
-      for y in self.cells:
-        output += "|"
-        if y[x] == 0:
-          output += " "
-        elif y[x] == 1:
-          output += "O"
-        elif y[x] == 2:
-          output += "X"
-      output += "|"
+      for cell in row:
+        output += '|'
+        if cell == 0:
+          output += ' '
+        elif cell == 1:
+          output += 'O'
+        elif cell == 2:
+          output += 'X'
+      output += '|'
       print output
     print "---------------"
     print " 0 1 2 3 4 5 6 "
