@@ -73,6 +73,36 @@ class Board(object):
 
     return (False, player, [])
 
+  def fours(self, player):
+    if player == 1:
+      nodes = self.player1_locs
+    else:
+      nodes = self.player2_locs
+
+    output = []
+
+    for node in nodes:
+      x = node[0]
+      y = node[1]
+
+      if (x, y + 1) in nodes and (x, y + 2) in nodes and (x, y + 3) in nodes:
+        row = [(x, y), (x, y + 1), (x, y + 2), (x, y + 3)]
+        output.append(row)
+
+      if (x + 1, y) in nodes and (x + 2, y) in nodes and (x + 3, y) in nodes:
+        row = [(x, y), (x + 1, y), (x + 2, y), (x + 3, y)]
+        output.append(row)
+
+      if (x + 1, y + 1) in nodes and (x + 2, y + 2) in nodes and (x + 3, y + 3) in nodes:
+        row = [(x, y), (x + 1, y + 1), (x + 2, y + 2), (x + 3, y + 3)]
+        output.append(row)
+
+      if (x - 1, y + 1) in nodes and (x - 2, y + 2) in nodes and (x - 3, y + 3) in nodes:
+        row = [(x, y), (x - 1, y + 1), (x - 2, y + 2), (x - 3, y + 3)]
+        output.append(row)
+
+    return output
+
   # Returns a list of list of three-in-a-row pairs for player player
   def threes(self, player):
     if player == 1:
@@ -86,29 +116,22 @@ class Board(object):
       x = node[0]
       y = node[1]
 
-      if (x, y + 1) in nodes and (x, y + 2) in nodes:
-        output.append([(x, y), (x, y + 1), (x, y + 2)])
+      if (x, y + 1) in nodes and (x, y + 2) in nodes and (x, y + 3) not in nodes and x, y - 1) not in nodes:
+        row = [(x, y), (x, y + 1), (x, y + 2)]
+        output.append(row)
 
-      if (x, y - 1) in nodes and (x, y - 2) in nodes:
-        output.append([(x, y), (x, y - 1), (x, y - 2)])
+      if (x + 1, y) in nodes and (x + 2, y) in nodes and (x + 3, y) not in nodes, and (x - 1, y) not in nodes:
+        row = [(x, y), (x + 1, y), (x + 2, y)]
+        output.append(row)
 
-      if (x + 1, y) in nodes and (x + 2, y) in nodes:
-        output.append([(x, y), (x + 1, y), (x + 2, y)])
+      if (x + 1, y + 1) in nodes and (x + 2, y + 2) in nodes and (x + 3, y + 3) not in nodes and (x - 1, y - 1) not in nodes:
+        row = [(x, y), (x + 1, y + 1), (x + 2, y + 2)]
+        output.append(row)
 
-      if (x - 1, y) in nodes and (x - 2, y) in nodes:
-        output.append([(x, y), (x - 1, y), (x - 2, y)])
+      if (x - 1, y + 1) in nodes and (x - 2, y + 2) in nodes and (x - 3, y + 3) not in nodes and (x + 1, y - 1) not in nodes:
+        row = [(x, y), (x - 1, y + 1), (x - 2, y + 2)]
+        output.append(row)
 
-      if (x + 1, y + 1) in nodes and (x + 2, y + 2) in nodes:
-        output.append([(x, y), (x + 1, y + 1), (x + 2, y + 2)])
-
-      if (x - 1, y + 1) in nodes and (x - 2, y + 2) in nodes:
-        output.append([(x, y), (x - 1, y + 1), (x - 2, y + 2)])
-
-      if (x - 1, y - 1) in nodes and (x - 2, y - 2) in nodes:
-        output.append([(x, y), (x - 1, y - 1), (x - 2, y - 2)])
-
-      if (x + 1, y - 1) in nodes and (x + 2, y - 2) in nodes:
-        output.append([(x, y), (x + 1, y - 1), (x + 2, y - 2)])
     return output
 
   # Returns a list of list of two-in-a-row pairs for player player
@@ -124,29 +147,22 @@ class Board(object):
       x = node[0]
       y = node[1]
 
-      if (x, y + 1) in nodes:
-        output.append([(x, y), (x, y + 1)])
+      if (x, y + 1) in nodes and (x, y + 2) not in nodes and (x, y - 1) not in nodes:
+        row = [(x, y), (x, y + 1)]
+        output.append(row)
 
-      if (x, y - 1) in nodes:
-        output.append([(x, y), (x, y - 1)])
+      if (x + 1, y) in nodes and (x + 2, y) not in nodes and (x - 1, y) not in nodes:
+        row = [(x, y), (x + 1, y)]
+        output.append(row)
 
-      if (x + 1, y) in nodes:
-        output.append([(x, y), (x + 1, y)])
+      if (x + 1, y + 1) in nodes and (x + 2, y + 2) not in nodes and (x - 1, y - 1) not in nodes:
+        row = [(x, y), (x + 1, y + 1)]
+        output.append(row)
 
-      if (x - 1, y) in nodes:
-        output.append([(x, y), (x - 1, y)])
+      if (x - 1, y + 1) in nodes and (x - 2, y + 2) not in nodes and (x + 1, y - 1) not in nodes:
+        row = [(x, y), (x - 1, y + 1)]
+        output.append(row)
 
-      if (x + 1, y + 1) in nodes:
-        output.append([(x, y), (x + 1, y + 1)])
-
-      if (x - 1, y + 1) in nodes:
-        output.append([(x, y), (x - 1, y + 1)])
-
-      if (x - 1, y - 1) in nodes:
-        output.append([(x, y), (x - 1, y - 1)])
-
-      if (x + 1, y - 1) in nodes:
-        output.append([(x, y), (x + 1, y - 1)])
     return output
 
   def valid_moves(self):
