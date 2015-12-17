@@ -149,8 +149,6 @@ def sub_menu(state):
     y_off = 200
     # More buttonz
 
-  create_text(screen, fontname, 25, "_________", black, (center[0], center[1]+y_off))
-
   create_text(screen, fontname, 25, "PLAY", black, (center[0]+30, center[1]+100+y_off))
   go_rect = create_rect(screen, [10, 10, 180, 60], black, (center[0]+30, center[1]+100+y_off), 1)
   create_text(screen, fontname, 25, "<", black, (center[0]-105, center[1]+100+y_off))
