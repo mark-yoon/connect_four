@@ -13,8 +13,10 @@ blue = (0, 0, 255)
 
 # Game state enum types
 MENU = 0
-HUMAN_AI = 1
-AI_AI = 2
+SUBMENU = 1
+HUMAN_AI = 2
+AI_AI = 3
+
 
 # Heuristic enum types
 RANDOM = 1
@@ -57,12 +59,16 @@ def create_rect(screen, rect, color, center, thickness):
   return rectangle
 
 def main_menu():
-  play_rect = create_rect(screen, [10, 10, 200, 100], black, (400, 450), 1)
+  center = screen.get_rect().center
 
-  create_text(screen, "font/mario.ttf", 25, "PLAY", black, screen.get_rect().center)
+  play_rect = create_rect(screen, [10, 10, 200, 80], black, (400, 450), 1)
+  watch_rect = create_rect(screen, [20, 10, 200, 80], black, (400, 550), 1)
+
+  create_text(screen, "font/mario.ttf", 25, "PLAY", black, center)
+  create_text(screen, "font/mario.ttf", 25, "WATCH", black, (center[0], center[1]+100))
   create_text(screen, "font/mario.ttf", 45, "Welcome to Connect 4!", black, (screen.get_rect().centerx, screen.get_rect().centery -200))
 
-  return play_rect
+  return (play_rect, watch_rect)
 
 def draw_game_boxes(x_center, y_center):
   game_rects = []
@@ -128,14 +134,22 @@ while running:
   screen.fill(white)
   # Main menu screen
   if game_state == MENU:
-    play_rect = main_menu()
+    buttons = main_menu()
+    play_rect = buttons[0]
+    watch_rect = buttons[1]
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         running = False
       elif event.type == pygame.MOUSEBUTTONDOWN:
         if play_rect.collidepoint(event.pos):
-          game_state = 1
+          game_state = HUMAN_AI
+        elif watch_rect.collidepoint(event.pos):
+          game_state = SUBMENU
       pygame.display.update()
+
+  # Play submenu screen
+  elif game_state == SUBMENU:
+    print 'hi'
 
   # Play game scene
   elif game_state == HUMAN_AI:
