@@ -19,15 +19,22 @@ class AI(object):
     # Returns a next move as an integer representing the column
     if self.heuristic == 1:
       return self.random(board)
-    else:
+    # Balanced heuristic
+    if self.heuristic == 2:
       board_copy = copy.deepcopy(board)
-      return self.minimax(board_copy, 5, self.player_num)[0]
+      return self.minimax(board_copy, 5, self.player_num, self.balanced)[0]
+    if self.heuristic == 3:
+      board_copy = copy.deepcopy(board)
+      return self.minimax(board_copy, 5, self.player_num, self.offensive)[0]
+    if self.heuristic == 4:
+      board_copy = copy.deepcopy(board)
+      return self.minimax(board_copy, 5, self.player_num, self.defensive)[0]
 
   def random(self, board):
     moves = board.valid_moves()
     return random.choice(moves)
 
-  def minimax(self, board, depth, player_num):
+  def minimax(self, board, depth, player_num, heuristic):
     # Set player values
     if player_num == 1:
       opp_num = 2
@@ -35,11 +42,11 @@ class AI(object):
       opp_num = 1
 
     # Start search for each valid move
-    possible_moves = [0 for i in range(board.x_max)]
+    possible_moves = [float("-inf") for i in range(board.x_max)]
     for col in board.valid_moves():
       board_copy = copy.deepcopy(board)
       board_copy.add(col, player_num)
-      possible_moves[col] = -self.search(board_copy, depth - 1, opp_num)
+      possible_moves[col] = -self.search(board_copy, depth - 1, opp_num, heuristic)
 
     # Take the move with the highest value
     h = max(possible_moves)
@@ -47,7 +54,7 @@ class AI(object):
     print (move, h)
     return (move, h)
 
-  def search(self, board, depth, player_num):
+  def search(self, board, depth, player_num, heuristic):
     if player_num == 1:
       opp_num = 2
     else:
@@ -55,7 +62,7 @@ class AI(object):
 
     # Check if leaf
     if depth == 0 or len(board.valid_moves()) == 0 or board.check_win(player_num)[0] or board.check_win(opp_num)[0]:
-      return self.eval_board(board, player_num)
+      return heuristic(board, player_num)
 
     # Get all possible board states from the given board
     possible_moves = []
@@ -67,23 +74,42 @@ class AI(object):
     # Run search recursively
     h = float("-inf")
     for move in possible_moves:
-      h = max(h, -self.search(move, depth - 1, opp_num))
+      h = max(h, -self.search(move, depth - 1, opp_num, heuristic))
     return h
 
   # Heuristic
-  def eval_board(self, board, player_num):
+  def balanced(self, board, player_num):
     if player_num == 1:
       opp_num = 2
     else:
       opp_num = 1
-    my_fours = board.fours(player_num)
-    my_threes = board.threes(player_num)
-    my_twos = board.twos(player_num)
+    (my_fours, my_threes, my_twos) = board.get_connected(player_num)
+    (opp_fours, opp_threes, opp_twos) = board.get_connected(opp_num)
 
-    opp_fours = board.fours(opp_num)
-    opp_threes = board.threes(opp_num)
-    opp_twos = board.twos(opp_num)
+    my_score = my_fours * 100000 + my_threes * 1000 + my_twos * 10
+    opp_score = opp_fours * 100000 + opp_threes * 1000 + opp_twos * 10
+    return my_score - opp_score
 
-    my_score = len(my_fours) * 100000 + len(my_threes) * 1000 + len(my_twos)
-    opp_score = len(opp_fours) * 100000 + len(opp_threes) * 1000 + len(opp_twos)
+  def offensive(self, board, player_num):
+    if player_num == 1:
+      opp_num = 2
+    else:
+      opp_num = 1
+    (my_fours, my_threes, my_twos) = board.get_connected(player_num)
+    (opp_fours, opp_threes, opp_twos) = board.get_connected(opp_num)
+
+    my_score = my_fours * 100000 + my_threes * 1000 + my_twos * 10
+    opp_score = opp_fours * 100000
+    return my_score - opp_score
+
+  def defensive(self, board, player_num):
+    if player_num == 1:
+      opp_num = 2
+    else:
+      opp_num = 1
+    (my_fours, my_threes, my_twos) = board.get_connected(player_num)
+    (opp_fours, opp_threes, opp_twos) = board.get_connected(opp_num)
+
+    my_score = my_fours * 100000
+    opp_score = opp_fours * 100000 + opp_threes * 1000 + opp_twos * 10
     return my_score - opp_score
