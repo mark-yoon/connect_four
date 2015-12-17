@@ -36,6 +36,12 @@ class Board(object):
     print " 0 1 2 3 4 5 6 "
     return ""
 
+  def check_tie(self):
+    for cell in self.cells[-1]:
+      if cell == 0:
+        return False
+    return True and not self.check_win(1)[0] and not self.check_win(2)[0]
+
   def check_win(self, player):
     if player == 1:
       nodes = self.player1_locs

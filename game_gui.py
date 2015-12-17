@@ -44,12 +44,14 @@ def play_init():
   global turn
   global invalid_move
   global victory
+  global tie
   global player1_locs
   global player2_locs
 
   board = Board()
   turn = 1
   victory = 0
+  tie = False
   player1_locs = []
   player2_locs = []
   invalid_move = False
@@ -59,14 +61,15 @@ def watch_init():
   global w_player2
   global w_board
   global w_turn
-  global w_invalid_move
   global w_victory
+  global w_tie
   global w_player1_locs
   global w_player2_locs
 
   w_board = Board()
   w_turn = 1
   w_victory = 0
+  w_tie = False
   w_player1_locs = []
   w_player2_locs = []
 
@@ -245,7 +248,7 @@ def draw_game_boxes(x_center, y_center, player1_locs, player2_locs):
     game_rects.append(col)
   return game_rects
 
-def draw_game_text(victory, turn, invalid_move, play):
+def draw_game_text(victory, tie, turn, invalid_move, play):
   if play:
     player1_text = "Your turn!"
     player2_text = "AI's turn!"
@@ -280,6 +283,13 @@ def draw_game_text(victory, turn, invalid_move, play):
       create_text(screen, fontname, 40, win_text, black, (400, 100))
     else:
         create_text(screen, fontname, 40, loss_text, black, (400, 100))
+    create_text(screen, fontname, 25, player1_counter, black, (115 , 230))
+    create_text(screen, fontname, 25, player2_counter, black, (700 , 230))
+    return (try_again, back_rect)
+  elif tie:
+    create_text(screen, fontname, 25, "Try again?", black, (400, 175))
+    try_again = create_rect(screen, [10, 10, 200, 50], black, (400, 175), 1)
+    create_text(screen, fontname, 40, "Tie!", black, (400, 100))
     create_text(screen, fontname, 25, player1_counter, black, (115 , 230))
     create_text(screen, fontname, 25, player2_counter, black, (700 , 230))
     return (try_again, back_rect)
@@ -452,7 +462,7 @@ while running:
   # Play game scene
   elif game_state == HUMAN_AI:
     game_rects = draw_game_boxes(0, 900, player1_locs, player2_locs)
-    (try_again, back_rect) = draw_game_text(victory, turn, invalid_move, True)
+    (try_again, back_rect) = draw_game_text(victory, tie, turn, invalid_move, True)
     pygame.display.update()
 
     if turn == 1:
@@ -463,6 +473,11 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
           # If player has won, if user clicks try again, reinitialize game
           if victory:
+            if try_again.collidepoint(event.pos):
+              play_init()
+            elif back_rect.collidepoint(event.pos):
+              game_state = SUBMENU_PLAY
+          elif tie:
             if try_again.collidepoint(event.pos):
               play_init()
             elif back_rect.collidepoint(event.pos):
@@ -484,6 +499,8 @@ while running:
                     if board.check_win(turn)[0]:
                       victory = turn
                       human += 1
+                    elif board.check_tie():
+                      tie = True
                     else:
                       turn = 2
                   else:
@@ -508,12 +525,14 @@ while running:
           victory = turn
           ai += 1
           turn = 1
+        elif board.check_tie():
+          tie = True
         else:
           turn = 1
 
   elif game_state == AI_AI:
     game_rects = draw_game_boxes(0, 900, w_player1_locs, w_player2_locs)
-    (try_again, back_rect) = draw_game_text(w_victory, w_turn, invalid_move, False)
+    (try_again, back_rect) = draw_game_text(w_victory, w_tie, w_turn, invalid_move, False)
     pygame.display.update()
 
     if w_turn == 1:
@@ -532,6 +551,9 @@ while running:
         if w_board.check_win(w_turn)[0]:
           w_victory = w_turn
           w_ai1 += 1
+          w_turn = 3
+        elif w_board.check_tie():
+          w_tie = True
           w_turn = 3
         else:
           w_turn = 2
@@ -553,6 +575,9 @@ while running:
           w_victory = w_turn
           w_ai2 += 1
           w_turn = 3
+        elif w_board.check_tie():
+          w_tie = True
+          w_turn = 3
         else:
           w_turn = 1
 
@@ -563,6 +588,12 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
           # If player has won, if user clicks try again, reinitialize game
           if w_victory:
+            if try_again.collidepoint(event.pos):
+              watch_init()
+              w_turn = 1
+            elif back_rect.collidepoint(event.pos):
+              game_state = SUBMENU_WATCH
+          if w_tie:
             if try_again.collidepoint(event.pos):
               watch_init()
               w_turn = 1
