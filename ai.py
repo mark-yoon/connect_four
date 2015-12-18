@@ -86,8 +86,8 @@ class AI(object):
     (my_fours, my_threes, my_twos) = board.get_connected(player_num)
     (opp_fours, opp_threes, opp_twos) = board.get_connected(opp_num)
 
-    my_score = my_fours * 100000 + my_threes * 1000 + my_twos * 10
-    opp_score = opp_fours * 100000 + opp_threes * 1000 + opp_twos * 10
+    my_score = my_fours * 1000000 + my_threes * 10000 + my_twos * 10
+    opp_score = opp_fours * 1000000 + opp_threes * 10000 + opp_twos * 10
     return my_score - opp_score
 
   def offensive(self, board, player_num):
@@ -98,8 +98,8 @@ class AI(object):
     (my_fours, my_threes, my_twos) = board.get_connected(player_num)
     (opp_fours, opp_threes, opp_twos) = board.get_connected(opp_num)
 
-    my_score = my_fours * 100000 + my_threes * 1000 + my_twos * 10
-    opp_score = opp_fours * 100000
+    my_score = my_fours * 1000000 + my_threes * 10000 + my_twos * 10
+    opp_score = opp_fours * 1000000
     return my_score - opp_score
 
   def defensive(self, board, player_num):
@@ -110,6 +110,6 @@ class AI(object):
     (my_fours, my_threes, my_twos) = board.get_connected(player_num)
     (opp_fours, opp_threes, opp_twos) = board.get_connected(opp_num)
 
-    my_score = my_fours * 100000
-    opp_score = opp_fours * 100000 + opp_threes * 1000 + opp_twos * 10
+    my_score = my_fours * 1000000
+    opp_score = opp_fours * 1000000 + opp_threes * 10000 + opp_twos * 10
     return my_score - opp_score
