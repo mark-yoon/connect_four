@@ -1,2 +1,2 @@
 # connect_four
-Connect Four gameplay with AI
+Connect Four gameplay with AI using Minimax.
